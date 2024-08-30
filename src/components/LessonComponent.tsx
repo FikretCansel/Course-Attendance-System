@@ -1,32 +1,65 @@
-'use client'
+"use client";
 
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import dynamic from "next/dynamic";
 
-// Kendi marker ikonlarını oluştur
-const userIcon = new L.Icon({
-  iconUrl:
-    "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
-  iconSize: [40, 40], // İkonun boyutu
-  iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
-  popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), {
+  ssr: false,
 });
+const Circle = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Circle),
+  { ssr: false }
+);
 
-const targetIcon = new L.Icon({
-  iconUrl: "https://cdn1.iconfinder.com/data/icons/web-55/32/web_1-512.png",
-  iconSize: [40, 40], // İkonun boyutu
-  iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
-  popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
-});
+
 
 function LessonCommponent() {
-  const [location, setLocation] = useState<{latitude: number | null,longitude: number| null }>({ latitude: null, longitude: null });
+  const [location, setLocation] = useState<{
+    latitude: number | null;
+    longitude: number | null;
+  }>({ latitude: null, longitude: null });
   const [balance, setBalance] = useState(10); // Başlangıç bakiyesi
   const [error, setError] = useState<string | null>(null);
   const [hasArrived, setHasArrived] = useState(false); // "Geldim" butonunun durumu
   const [message, setMessage] = useState(""); // Durum mesajı
+  const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
+    userIcon: null,
+    targetIcon: null,
+  });
+
+  useEffect(() => {
+    // Import Leaflet dynamically to avoid SSR issues
+    import("leaflet").then((mod) => {
+      const userIcon = new mod.default.Icon({
+        iconUrl:
+          "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
+        iconSize: [40, 40], // İkonun boyutu
+        iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
+        popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
+      });
+      const targetIcon = new mod.default.Icon({
+        iconUrl:
+          "https://cdn1.iconfinder.com/data/icons/web-55/32/web_1-512.png",
+        iconSize: [40, 40], // İkonun boyutu
+        iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
+        popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
+      });
+      setLIcon({ userIcon, targetIcon });
+    });
+  }, []);
 
   // Yeni hedeflenen konum (36°24'51.3"N 34°03'43.6"E → 36.414250, 34.062111)
   const targetLocation = {
@@ -63,7 +96,7 @@ function LessonCommponent() {
   }, [hasArrived]);
 
   // Belirtilen konumla kullanıcının konumunu karşılaştırma
-  const isInTargetLocation = (userLat : number, userLng: number) => {
+  const isInTargetLocation = (userLat: number, userLng: number) => {
     const distance = calculateDistance(
       userLat,
       userLng,
@@ -74,7 +107,12 @@ function LessonCommponent() {
   };
 
   // Haversine formülü ile iki koordinat arasındaki mesafeyi hesaplama
-  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+  const calculateDistance = (
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ) => {
     const R = 6371; // Dünya'nın yarıçapı (km)
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
@@ -144,7 +182,7 @@ function LessonCommponent() {
               {/* Kullanıcının konumunu gösteren özel ikonlu marker */}
               <Marker
                 position={[location.latitude, location.longitude]}
-                icon={userIcon} // Kullanıcı için özel ikon
+                icon={LIcon.userIcon}
               >
                 <Popup>
                   Şu an buradasınız! <br /> Bakiye: {balance}
@@ -154,7 +192,7 @@ function LessonCommponent() {
               {/* Hedef konumu gösteren özel ikonlu marker */}
               <Marker
                 position={[targetLocation.latitude, targetLocation.longitude]}
-                icon={targetIcon} // Hedef için özel ikon
+                icon={LIcon.targetIcon}
               >
                 <Popup>Hedef Konum</Popup>
               </Marker>
