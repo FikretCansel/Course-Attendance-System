@@ -1,5 +1,4 @@
-"use client";
-
+'use client'
 import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
@@ -24,49 +23,67 @@ const Circle = dynamic(
   { ssr: false }
 );
 
-
-
 function LessonCommponent() {
   const [location, setLocation] = useState<{
     latitude: number | null;
     longitude: number | null;
   }>({ latitude: null, longitude: null });
-  const [balance, setBalance] = useState(10); // Başlangıç bakiyesi
+  const [balance, setBalance] = useState(10);
   const [error, setError] = useState<string | null>(null);
-  const [hasArrived, setHasArrived] = useState(false); // "Geldim" butonunun durumu
-  const [message, setMessage] = useState(""); // Durum mesajı
+  const [hasArrived, setHasArrived] = useState(false);
+  const [message, setMessage] = useState("");
   const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
     userIcon: null,
     targetIcon: null,
   });
 
   useEffect(() => {
-    // Import Leaflet dynamically to avoid SSR issues
     import("leaflet").then((mod) => {
       const userIcon = new mod.default.Icon({
         iconUrl:
           "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
-        iconSize: [40, 40], // İkonun boyutu
-        iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
-        popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
       });
       const targetIcon = new mod.default.Icon({
         iconUrl:
           "https://cdn1.iconfinder.com/data/icons/web-55/32/web_1-512.png",
-        iconSize: [40, 40], // İkonun boyutu
-        iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
-        popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
       });
       setLIcon({ userIcon, targetIcon });
     });
   }, []);
 
-  // Yeni hedeflenen konum (36°24'51.3"N 34°03'43.6"E → 36.414250, 34.062111)
   const targetLocation = {
     latitude: 36.41425,
     longitude: 34.062111,
     radius: 0.1, // 100 metre (0.1 km)
   };
+
+  useEffect(() => {
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setLocation({ latitude, longitude });
+            console.log('tekrar çekti', latitude)
+          },
+          (error) => {
+            setError(error.message);
+          },
+          { enableHighAccuracy: true }
+        );
+      } else {
+        setError("Tarayıcı Geolocation API’sini desteklemiyor.");
+      }
+    };
+    const intervalId = setInterval(updateLocation, 10000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -95,7 +112,6 @@ function LessonCommponent() {
     }
   }, [hasArrived]);
 
-  // Belirtilen konumla kullanıcının konumunu karşılaştırma
   const isInTargetLocation = (userLat: number, userLng: number) => {
     const distance = calculateDistance(
       userLat,
@@ -106,14 +122,13 @@ function LessonCommponent() {
     return distance <= targetLocation.radius;
   };
 
-  // Haversine formülü ile iki koordinat arasındaki mesafeyi hesaplama
   const calculateDistance = (
     lat1: number,
     lon1: number,
     lat2: number,
     lon2: number
   ) => {
-    const R = 6371; // Dünya'nın yarıçapı (km)
+    const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
     const a =
@@ -123,11 +138,10 @@ function LessonCommponent() {
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Mesafe (km)
+    const distance = R * c;
     return distance;
   };
 
-  // Dereceyi radyana çevirme
   const deg2rad = (deg: number) => {
     return deg * (Math.PI / 180);
   };
@@ -138,18 +152,16 @@ function LessonCommponent() {
       <p>Ders Adı: Tiyatro</p>
       <p>Ders Zamanı: 30.08.2024</p>
 
-      {/* Geldim butonu */}
       <button
         className="bg-red-400 p-3"
         onClick={() => {
           setHasArrived(true);
         }}
-        disabled={hasArrived} // Buton devre dışı bırakılır
+        disabled={hasArrived}
       >
         Geldim
       </button>
 
-      {/* Durum mesajı */}
       {message && (
         <p
           style={{
@@ -179,7 +191,6 @@ function LessonCommponent() {
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
 
-              {/* Kullanıcının konumunu gösteren özel ikonlu marker */}
               <Marker
                 position={[location.latitude, location.longitude]}
                 icon={LIcon.userIcon}
@@ -189,7 +200,6 @@ function LessonCommponent() {
                 </Popup>
               </Marker>
 
-              {/* Hedef konumu gösteren özel ikonlu marker */}
               <Marker
                 position={[targetLocation.latitude, targetLocation.longitude]}
                 icon={LIcon.targetIcon}
@@ -197,13 +207,12 @@ function LessonCommponent() {
                 <Popup>Hedef Konum</Popup>
               </Marker>
 
-              {/* Hedef konum etrafında mavi çember */}
               <Circle
                 center={[targetLocation.latitude, targetLocation.longitude]}
-                radius={targetLocation.radius * 1000} // Çemberin çapı (metre cinsinden)
+                radius={targetLocation.radius * 1000}
                 color="blue"
                 fillColor="blue"
-                fillOpacity={0.3} // Çemberin iç renginin şeffaflığı
+                fillOpacity={0.3}
               />
             </MapContainer>
           )}
