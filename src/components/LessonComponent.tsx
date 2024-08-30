@@ -58,8 +58,8 @@ function LessonCommponent() {
   }, []);
 
   const targetLocation = {
-    latitude: 36.41425,
-    longitude: 34.062111,
+    latitude: 40.869805,
+    longitude: 29.288917,
     radius: 0.1, // 100 metre (0.1 km)
   };
 
@@ -70,7 +70,6 @@ function LessonCommponent() {
           (position) => {
             const { latitude, longitude } = position.coords;
             setLocation({ latitude, longitude });
-            console.log('tekrar çekti', latitude)
           },
           (error) => {
             setError(error.message);
