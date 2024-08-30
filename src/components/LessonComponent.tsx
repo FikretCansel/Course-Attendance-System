@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
-import "leaflet/dist/leaflet.css"; // Leaflet stilleri
+import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
 // Kendi marker ikonlarını oluştur
@@ -22,9 +22,9 @@ const targetIcon = new L.Icon({
 });
 
 function LessonCommponent() {
-  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [location, setLocation] = useState<{latitude: number | null,longitude: number| null }>({ latitude: null, longitude: null });
   const [balance, setBalance] = useState(10); // Başlangıç bakiyesi
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [hasArrived, setHasArrived] = useState(false); // "Geldim" butonunun durumu
   const [message, setMessage] = useState(""); // Durum mesajı
 
@@ -63,7 +63,7 @@ function LessonCommponent() {
   }, [hasArrived]);
 
   // Belirtilen konumla kullanıcının konumunu karşılaştırma
-  const isInTargetLocation = (userLat, userLng) => {
+  const isInTargetLocation = (userLat : number, userLng: number) => {
     const distance = calculateDistance(
       userLat,
       userLng,
@@ -74,7 +74,7 @@ function LessonCommponent() {
   };
 
   // Haversine formülü ile iki koordinat arasındaki mesafeyi hesaplama
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     const R = 6371; // Dünya'nın yarıçapı (km)
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
@@ -90,7 +90,7 @@ function LessonCommponent() {
   };
 
   // Dereceyi radyana çevirme
-  const deg2rad = (deg) => {
+  const deg2rad = (deg: number) => {
     return deg * (Math.PI / 180);
   };
 

@@ -1,9 +1,7 @@
-// pages/courses.js
-'use client'
+import LessonCommponent from "@/components/LessonComponent";
 
-import LessonCommponent from "@/components/LessonComponent"
 
-export default function Courses() {
+export default function Lesson() {
   return (
     <div>
       <LessonCommponent/>
