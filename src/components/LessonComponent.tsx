@@ -1,20 +1,21 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css'; // Leaflet stilleri
-import L from 'leaflet';
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import "leaflet/dist/leaflet.css"; // Leaflet stilleri
+import L from "leaflet";
 
 // Kendi marker ikonlarını oluştur
 const userIcon = new L.Icon({
-  iconUrl: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png',
+  iconUrl:
+    "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
   iconSize: [40, 40], // İkonun boyutu
   iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
   popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
 });
 
 const targetIcon = new L.Icon({
-  iconUrl: 'https://cdn1.iconfinder.com/data/icons/web-55/32/web_1-512.png',
+  iconUrl: "https://cdn1.iconfinder.com/data/icons/web-55/32/web_1-512.png",
   iconSize: [40, 40], // İkonun boyutu
   iconAnchor: [20, 40], // İkonun harita üzerindeki nokta ile hizalanması
   popupAnchor: [0, -40], // Popup'ın pozisyonunu ayarlamak için
@@ -25,11 +26,11 @@ function LessonCommponent() {
   const [balance, setBalance] = useState(10); // Başlangıç bakiyesi
   const [error, setError] = useState(null);
   const [hasArrived, setHasArrived] = useState(false); // "Geldim" butonunun durumu
-  const [message, setMessage] = useState(''); // Durum mesajı
+  const [message, setMessage] = useState(""); // Durum mesajı
 
   // Yeni hedeflenen konum (36°24'51.3"N 34°03'43.6"E → 36.414250, 34.062111)
   const targetLocation = {
-    latitude: 36.414250,
+    latitude: 36.41425,
     longitude: 34.062111,
     radius: 0.1, // 100 metre (0.1 km)
   };
@@ -45,9 +46,9 @@ function LessonCommponent() {
           if (hasArrived) {
             if (isInTargetLocation(latitude, longitude)) {
               setBalance((prevBalance) => prevBalance - 1); // Bakiye azaltılıyor
-              setMessage('Ders kaydınız onaylandı!'); // Yeşil mesaj
+              setMessage("Ders kaydınız onaylandı!"); // Yeşil mesaj
             } else {
-              setMessage('Derste değilsiniz.'); // Kırmızı mesaj
+              setMessage("Derste değilsiniz."); // Kırmızı mesaj
             }
           }
         },
@@ -57,7 +58,7 @@ function LessonCommponent() {
         { enableHighAccuracy: true }
       );
     } else {
-      setError('Tarayıcı Geolocation API’sini desteklemiyor.');
+      setError("Tarayıcı Geolocation API’sini desteklemiyor.");
     }
   }, [hasArrived]);
 
@@ -79,8 +80,10 @@ function LessonCommponent() {
     const dLon = deg2rad(lon2 - lon1);
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c; // Mesafe (km)
     return distance;
@@ -99,7 +102,7 @@ function LessonCommponent() {
 
       {/* Geldim butonu */}
       <button
-        className='bg-red-400 p-3'
+        className="bg-red-400 p-3"
         onClick={() => {
           setHasArrived(true);
         }}
@@ -110,7 +113,11 @@ function LessonCommponent() {
 
       {/* Durum mesajı */}
       {message && (
-        <p style={{ color: message === 'Ders kaydınız onaylandı!' ? 'green' : 'red' }}>
+        <p
+          style={{
+            color: message === "Ders kaydınız onaylandı!" ? "green" : "red",
+          }}
+        >
           {message}
         </p>
       )}
@@ -127,7 +134,7 @@ function LessonCommponent() {
             <MapContainer
               center={[location.latitude, location.longitude]}
               zoom={13}
-              style={{ height: '400px', width: '100%' }}
+              style={{ height: "400px", width: "100%" }}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
