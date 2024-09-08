@@ -11,7 +11,7 @@ function App() {
     useEffect(() => {
         
         if(user){
-            router.push('/courses')
+            router.push('/link-course')
         }
         else {
             router.push('/')
