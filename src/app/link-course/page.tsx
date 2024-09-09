@@ -1,9 +1,10 @@
-import LinkCoursesComponent from "@/components/LinkCourseComponent";
+import FetchData from "@/components/FetchData";
+
 
 export default function LinkCourse() {
   return (
     <div>
-      <LinkCoursesComponent/>
+      <FetchData/>
     </div>
   );
 }

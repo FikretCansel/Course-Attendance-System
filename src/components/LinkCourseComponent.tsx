@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
 import {db} from "../Firebase"
-import { doc, getFirestore } from "firebase/firestore";
+import { doc, getFirestore ,collection} from "firebase/firestore";
 import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
+
 
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
@@ -26,7 +27,7 @@ const Circle = dynamic(
   { ssr: false }
 );
 
-function LessonCommponent() {
+function LinkCourseComponent() {
   const [location, setLocation] = useState<{
     latitude: number | null;
     longitude: number | null;
@@ -39,13 +40,16 @@ function LessonCommponent() {
     userIcon: null,
     targetIcon: null,
   });
+
   const [value, loading] = useDocument(
     doc(db, 'linkCourses', 'lqgqG5HZ8XnkCuZODqB2'),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
-  console.log(value, loading)
+
+
+  
 
   useEffect(() => {
     import("leaflet").then((mod) => {
@@ -155,11 +159,12 @@ function LessonCommponent() {
     return deg * (Math.PI / 180);
   };
 
+
   return (
+   
     <div>
-      <h1>Ders Bilgileri</h1>
-      <p>Ders Adı: Tiyatro</p>
-      <p>Ders Zamanı: 30.08.2024</p>
+      
+      
 
       <button
         className="bg-red-400 p-3"
@@ -231,4 +236,4 @@ function LessonCommponent() {
   );
 }
 
-export default LessonCommponent;
+export default LinkCourseComponent;
