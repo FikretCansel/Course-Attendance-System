@@ -30,7 +30,7 @@ const Circle = dynamic(
 function LinkCourseComponent() {
   const [location, setLocation] = useState<{
     latitude: number | null;
-    longitude: number | null;
+  longitude: number | null;
   }>({ latitude: null, longitude: null });
   const [balance, setBalance] = useState(10);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +39,7 @@ function LinkCourseComponent() {
   const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
     userIcon: null,
     targetIcon: null,
+
   });
 
   const [value, loading] = useDocument(
@@ -166,15 +167,7 @@ function LinkCourseComponent() {
       
       
 
-      <button
-        className="bg-red-400 p-3"
-        onClick={() => {
-          setHasArrived(true);
-        }}
-        disabled={hasArrived}
-      >
-        Geldim
-      </button>
+
 
       {message && (
         <p
@@ -190,15 +183,13 @@ function LinkCourseComponent() {
         <p>Hata: {error}</p>
       ) : (
         <>
-          <p>Enlem: {location.latitude}</p>
-          <p>Boylam: {location.longitude}</p>
-          <p>Güncel Bakiye: {balance}</p>
+
 
           {location.latitude && location.longitude && (
             <MapContainer
               center={[location.latitude, location.longitude]}
               zoom={13}
-              style={{ height: "400px", width: "100%" }}
+              style={{ height: "650px", width: "100%" }}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

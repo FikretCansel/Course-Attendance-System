@@ -1,10 +1,11 @@
 import FetchData from "@/components/FetchData";
+import { MainPage } from "@/components/MainPage";
 
 
 export default function LinkCourse() {
   return (
     <div>
-      <FetchData/>
+      <MainPage/>
     </div>
   );
 }
