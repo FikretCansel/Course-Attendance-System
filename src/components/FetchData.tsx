@@ -8,21 +8,31 @@ import Image from "next/image";
 const FetchData: FC = () => {
   // Koleksiyon referansları
   const coursesRef = collection(db, "linkCourses");
-  const studentsRef = collection(db, "studentsOfTheCourse");
-const [hasArrived,setHasArrived] = useState(false);
+  const studentsRef = collection(db, "linkCourses/lqgqG5HZ8XnkCuZODqB2/1");
+
   // Koleksiyonlardan veri çekme
   const [courses, isLoading, error] = useCollectionData(coursesRef);
   const [students, studentIsLoading, studentError] =
     useCollectionData(studentsRef);
-
+    const [sendMail,setSendMail] = useState(false);
+    
   if (isLoading || studentIsLoading) return <h1>Yükleniyor...</h1>;
   if (error || studentError)
     return <h1>Bir hata oluştu: {error?.message || studentError?.message}</h1>;
 
-  // Öğrencileri ilgili kurs ID'ye göre filtrele
-  const getStudentsForCourse = (courseId: string) => {
-    return students?.filter((student) => student.courseId === courseId) || [];
+
+  const sendEmailToStudent = (email: string, name: string) => {
+    console.log(`Sending email to: ${email} for student: ${name}`);
+    
   };
+  if(sendMail === true)
+  {
+    students?.forEach((student) => {
+      sendEmailToStudent(student.mail, student.name);
+    });
+    setSendMail(false);
+  }
+
 
 
   
@@ -31,7 +41,7 @@ const [hasArrived,setHasArrived] = useState(false);
   return (
     <div>
       {courses?.map((course, index) => {
-        const studentsForCourse = getStudentsForCourse(course.id);
+        
 
         return (
           <div className="card" key={index}>
@@ -64,7 +74,7 @@ const [hasArrived,setHasArrived] = useState(false);
                     </tr>
                   </thead>
                   <tbody>
-                    {studentsForCourse.map((student, index) => (
+                    {students?.map((student, index) => (
                       <tr key={index}>
                         <td>{student.name}</td>
                         <td>{student.surname}</td>
@@ -76,11 +86,11 @@ const [hasArrived,setHasArrived] = useState(false);
                 <button
                   className="bg-red-400 p-3"
                   onClick={() => {
-                    setHasArrived(true);
+                    setSendMail(true);
                   }}
-                  disabled={hasArrived}
+                  disabled={sendMail}
                 >
-                  Geldim
+                  Gönder
                 </button>
               </div>
             </div>

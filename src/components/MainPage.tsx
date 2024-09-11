@@ -2,17 +2,17 @@
 import React from "react";
 import FetchData from "./FetchData";
 import LinkCourseComponent from "./LinkCourseComponent";
+import { Navbar } from "./Navbar";
 
 export const MainPage = () => {
   return (
-    <div  >
-        
+    <div>
       <div className="columns ">
-        <div className="column m-3">
+        <div className="is-5 m-3">
           <FetchData />
         </div>
         <div className="column is-three-quarters">
-        <LinkCourseComponent />
+          <LinkCourseComponent />
         </div>
       </div>
     </div>
