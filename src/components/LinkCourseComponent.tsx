@@ -113,7 +113,7 @@ function LinkCourseComponent({course, hasArrived}: {course: any, hasArrived: boo
   const targetLocation = {
     latitude: course.geolocation._lat,
     longitude: course.geolocation._long,
-    radius: 0.1, // 100 metre (0.1 km)
+    radius: course.radius,
   };
 
   const isInTargetLocation = (userLat: number, userLng: number) => {
