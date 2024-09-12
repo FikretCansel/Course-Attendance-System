@@ -3,14 +3,15 @@ import { useState} from "react";
 import { collection } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../Firebase";
+import { useParams } from "next/navigation";
 
 const FetchData = ({course,setHasArrived}: {course: any, setHasArrived: any}) => {
-  const studentsRef = collection(db, "linkCourses/lqgqG5HZ8XnkCuZODqB2/1");
+  const params = useParams()
+  const studentsRef = collection(db, `linkCourses/${params.id}/1`);
 
   const [students, studentIsLoading, studentError] =
     useCollectionData(studentsRef);
     const [sendMail,setSendMail] = useState(false);
-    
   if (!course || studentIsLoading) return <h1>Yükleniyor...</h1>;
   if (studentError)
     return <h1>Bir hata oluştu: { studentError?.message}</h1>;
