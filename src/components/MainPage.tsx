@@ -5,12 +5,14 @@ import { doc} from "firebase/firestore";
 import { db } from "../Firebase";
 import LinkCourseComponent from "./LinkCourseComponent";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import { useParams } from "next/navigation";
 
 export const MainPage = () => {
   const [hasArrived, setHasArrived] = useState(false);
-  const coursesRef = doc(db, "linkCourses", 'lqgqG5HZ8XnkCuZODqB2');
+  const params = useParams()
+  const coursesRef = doc(db, "linkCourses", params.id as string ?? 'params');
   const [course] =  useDocumentDataOnce(coursesRef);
-  console.log(course)
+  console.log(params)
 
   return (
     <div>

@@ -1,27 +1,17 @@
 "use client";
 
+import { db } from "@/Firebase";
+import { collection } from "firebase/firestore";
 import Head from "next/head";
 import Link from "next/link";
-
-const courses = [
-  {
-    id: 1,
-    name: "JavaScript Basics",
-    description: "A course on the fundamentals of JavaScript.",
-  },
-  {
-    id: 2,
-    name: "Building Applications with React.js",
-    description: "Develop modern web applications using React.js.",
-  },
-  {
-    id: 3,
-    name: "Server-Side Rendering with Next.js",
-    description: "Techniques for server-side rendering with Next.js.",
-  },
-];
+import { useCollection } from "react-firebase-hooks/firestore";
 
 export default function CoursesComponent() {
+  const coursesRef = collection(db, "linkCourses");
+
+  // Fetching data from the collection
+  const [coursesSnapshot, isLoading, error] = useCollection(coursesRef);
+
   return (
     <div>
       <Head>
@@ -32,16 +22,20 @@ export default function CoursesComponent() {
       <main>
         <h1>My Courses</h1>
         <ul>
-          {courses.map((course, i) => (
-            <div key={course.id}>
-              <Link href={"/lesson"}>
-                <li>
-                  <h2>{course.name}</h2>
-                  <p>{course.description}</p>
-                </li>
-              </Link>
-            </div>
-          ))}
+          {coursesSnapshot && coursesSnapshot.docs.map((doc) => {
+            const course = doc.data(); // Get course data
+            return (
+              <div key={doc.id}>
+                <Link href={`/link-course/${doc.id}`}>
+                  <li>
+                    <h2>{course.courseName}</h2>
+                    <p>{course.tearcherName}</p>
+                    <p>Course ID: {doc.id}</p> {/* Display course ID */}
+                  </li>
+                </Link>
+              </div>
+            );
+          })}
         </ul>
       </main>
 

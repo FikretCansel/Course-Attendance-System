@@ -2,19 +2,20 @@
 import React, { useEffect } from 'react'
 import { useAuthState } from "react-firebase-hooks/auth";
 import {auth} from "../Firebase";
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 function App() {
 
     const [user,isLoading]= useAuthState(auth);
     const router = useRouter()
+    const params = useParams()
     useEffect(() => {
         
         if(user){
-            router.push('/link-course')
+            // router.push('/link-course/'+params.id)
         }
         else {
-            router.push('/')
+            // router.push('/')
         }
         
     }, [user, router])
