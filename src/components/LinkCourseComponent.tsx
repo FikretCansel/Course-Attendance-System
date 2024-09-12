@@ -2,9 +2,6 @@
 import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import dynamic from "next/dynamic";
-import {db} from "../Firebase"
-import { doc, getFirestore ,collection} from "firebase/firestore";
-import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
 
 
 const MapContainer = dynamic(
@@ -27,56 +24,19 @@ const Circle = dynamic(
   { ssr: false }
 );
 
-function LinkCourseComponent() {
+function LinkCourseComponent({course, hasArrived}: {course: any, hasArrived: boolean}) {
   const [location, setLocation] = useState<{
     latitude: number | null;
   longitude: number | null;
   }>({ latitude: null, longitude: null });
   const [balance, setBalance] = useState(10);
   const [error, setError] = useState<string | null>(null);
-  const [hasArrived, setHasArrived] = useState(false);
   const [message, setMessage] = useState("");
   const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
     userIcon: null,
     targetIcon: null,
 
   });
-
-  const [value, loading] = useDocument(
-    doc(db, 'linkCourses', 'lqgqG5HZ8XnkCuZODqB2'),
-    {
-      snapshotListenOptions: { includeMetadataChanges: true },
-    }
-  );
-
-
-  
-
-  useEffect(() => {
-    import("leaflet").then((mod) => {
-      const userIcon = new mod.default.Icon({
-        iconUrl:
-          "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40],
-      });
-      const targetIcon = new mod.default.Icon({
-        iconUrl:
-          "https://cdn1.iconfinder.com/data/icons/web-55/32/web_1-512.png",
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40],
-      });
-      setLIcon({ userIcon, targetIcon });
-    });
-  }, []);
-
-  const targetLocation = {
-    latitude: 40.869805,
-    longitude: 29.288917,
-    radius: 0.1, // 100 metre (0.1 km)
-  };
 
   useEffect(() => {
     const updateLocation = () => {
@@ -125,6 +85,36 @@ function LinkCourseComponent() {
       setError("Tarayıcı Geolocation API’sini desteklemiyor.");
     }
   }, [hasArrived]);
+
+
+
+  useEffect(() => {
+    import("leaflet").then((mod) => {
+      const userIcon = new mod.default.Icon({
+        iconUrl:
+          "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png",
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
+      });
+      const targetIcon = new mod.default.Icon({
+        iconUrl:
+          "https://cdn1.iconfinder.com/data/icons/web-55/32/web_1-512.png",
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
+      });
+      setLIcon({ userIcon, targetIcon });
+    });
+  }, []);
+
+  if(!course) return <h1>Yükleniyor</h1>
+
+  const targetLocation = {
+    latitude: course.geolocation._lat,
+    longitude: course.geolocation._long,
+    radius: 0.1, // 100 metre (0.1 km)
+  };
 
   const isInTargetLocation = (userLat: number, userLng: number) => {
     const distance = calculateDistance(
