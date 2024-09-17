@@ -1,24 +1,30 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuthState } from "react-firebase-hooks/auth";
 import {auth} from "../Firebase";
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 function App() {
-
-    const [user,isLoading]= useAuthState(auth);
+    const [isLoading, setIsLoading] = useState(true);
+    const pathname = usePathname();
     const router = useRouter()
-    const params = useParams()
     useEffect(() => {
+        setIsLoading(true)
+        console.log(pathname)
+        auth.onAuthStateChanged(authUser=>{
+            setIsLoading(false)
+            if(authUser){
+                router.push(pathname)
+                if(pathname === '/login'){
+                    router.push('courses')
+                }
+            }
+            else{
+                router.push('/login')
+            }
+          })
         
-        if(user){
-            // router.push('/link-course/'+params.id)
-        }
-        else {
-            // router.push('/')
-        }
-        
-    }, [user, router])
+    }, [])
     
 
   if(isLoading){return <h1>Yükleniyor...</h1>}

@@ -3,11 +3,13 @@ import React, { useState, useCallback } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../Firebase";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const LoginComponent = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const router = useRouter();
+  
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -15,7 +17,9 @@ export const LoginComponent = () => {
         return;
       }
 
-      signInWithEmailAndPassword(auth, email, password).catch((e) => {
+      signInWithEmailAndPassword(auth, email, password).then(()=>{
+        router.push('/courses')
+      }).catch((e) => {
         console.log(e);
       });
     },

@@ -3,10 +3,12 @@ import React from "react";
 import { useState, useCallback } from "react";
 import { auth } from "../Firebase.js";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useRouter } from "next/navigation.js";
 export const RegisterComponent = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleSubmit = useCallback(
     (e) => {
@@ -17,6 +19,7 @@ export const RegisterComponent = () => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((auth) => {
           updateProfile(auth.user, { displayName: name });
+          router.push('/courses')
         })
         .catch((e) => {
           console.log("kayıt olunamadı ", e);
