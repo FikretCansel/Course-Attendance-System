@@ -4,6 +4,7 @@ import { collection } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../Firebase";
 import { useParams } from "next/navigation";
+import Loaders from "./Loaders";
 
 const FetchData = ({course,setHasArrived}: {course: any, setHasArrived: any}) => {
   const params = useParams()
@@ -12,7 +13,7 @@ const FetchData = ({course,setHasArrived}: {course: any, setHasArrived: any}) =>
   const [students, studentIsLoading, studentError] =
     useCollectionData(studentsRef);
     const [sendMail,setSendMail] = useState(false);
-  if (!course || studentIsLoading) return <h1>Yükleniyor...</h1>;
+  if (!course || studentIsLoading) return <Loaders/>;
   if (studentError)
     return <h1>Bir hata oluştu: { studentError?.message}</h1>;
 

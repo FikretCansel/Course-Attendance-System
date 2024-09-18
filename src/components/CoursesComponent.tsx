@@ -5,6 +5,7 @@ import { collection } from "firebase/firestore";
 import Head from "next/head";
 import Link from "next/link";
 import { useCollection } from "react-firebase-hooks/firestore";
+import Loaders from "./Loaders";
 
 export default function CoursesComponent() {
   const coursesRef = collection(db, "linkCourses");
@@ -12,6 +13,11 @@ export default function CoursesComponent() {
   // Fetching data from the collection
   const [coursesSnapshot, isLoading, error] = useCollection(coursesRef);
 
+  if(isLoading)
+  {
+    return <Loaders/>;
+  }
+ 
   return (
     <div>
       <Head>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { signOut } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Loaders from './Loaders';
 
 export const Navbar = () => {
   const [user, isLoading] = useAuthState(auth);
@@ -31,7 +32,7 @@ export const Navbar = () => {
   }, []);
 
   if (isLoading) { 
-    return <h1>Yükleniyor...</h1>; 
+    return <Loaders/>; 
   }
 
   return (
@@ -74,8 +75,8 @@ export const Navbar = () => {
         <div id="navbarBasicExample" className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
           <div className="navbar-start">
             <Link className="navbar-item" href="/" onClick={() => setIsActive(false)}>Anasayfa</Link>
-            <Link className="navbar-item" href="/lessonpackages" onClick={() => setIsActive(false)}>Ders Paketleri</Link>
-            <Link className="navbar-item" href="/mycourses" onClick={() => setIsActive(false)}>Kurslarım</Link>
+            <Link className="navbar-item" href="/add-course" onClick={() => setIsActive(false)}>Kurs Ekle</Link>
+            <Link className="navbar-item" href="/courses" onClick={() => setIsActive(false)}>Kurslarım</Link>
             <div className="navbar-item has-dropdown is-hoverable">
               <p className="navbar-link" onClick={() => setIsActive(false)}>Daha Fazlası</p>
               <div className="navbar-dropdown">
