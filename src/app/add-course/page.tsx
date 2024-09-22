@@ -4,29 +4,11 @@ import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import { db } from "@/Firebase";
 import { addDoc, collection, GeoPoint } from "firebase/firestore";
-
-const ref = collection(db, "linkCourses");
-const MapContainer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-const TileLayer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
-);
-const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), {
-  ssr: false,
-});
-const useMapEvents = dynamic(
-  () => import("react-leaflet").then((mod) => mod.useMapEvents),
-  { ssr: false }
-);
+import { useImportReaflet } from "@/lib/react-leaflet";
 
 export default function DraggableMarkerMap() {
+  const { MapContainer, Marker, Popup, TileLayer } = useImportReaflet();
+  const ref = collection(db, "linkCourses");
   const [position, setPosition] = useState({ lat: 36.41425, lng: 34.06211 });
   const [inputValues, setInputValues] = useState({
     lat: 36.41425,
@@ -34,8 +16,7 @@ export default function DraggableMarkerMap() {
     courseName: "",
     teacherName: "",
     userId: "",
-    radius: 0
-    
+    radius: 0,
   });
 
   const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
@@ -49,7 +30,7 @@ export default function DraggableMarkerMap() {
         courseName: inputValues.courseName,
         courseTeacher: inputValues.teacherName,
         geolocation: new GeoPoint(position.lat, position.lng),
-        radius: Number(inputValues.radius), 
+        radius: Number(inputValues.radius),
       });
       setInputValues({
         ...inputValues,
@@ -57,7 +38,7 @@ export default function DraggableMarkerMap() {
         teacherName: "",
         lat: position.lat,
         lng: position.lng,
-        radius: 0, 
+        radius: 0,
       });
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -92,13 +73,6 @@ export default function DraggableMarkerMap() {
   };
 
   const MapClickHandler = () => {
-    useMapEvents({
-      click(e) {
-        const { lat, lng } = e.latlng;
-        setPosition({ lat, lng });
-        setInputValues({ ...inputValues, lat, lng });
-      },
-    });
     return null;
   };
 
@@ -167,9 +141,7 @@ export default function DraggableMarkerMap() {
 
                       <tr>
                         <th>
-                          <label className="basis-1/6 font-semibold">
-                            Lat
-                          </label>
+                          <label className="basis-1/6 font-semibold">Lat</label>
                         </th>
                         <td>
                           <input
