@@ -4,10 +4,11 @@ import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import { db } from "@/Firebase";
 import { addDoc, collection, GeoPoint } from "firebase/firestore";
-import { useImportReaflet } from "@/lib/react-leaflet";
+import { importReaflet } from "@/lib/react-leaflet";
+const { MapContainer, Marker, Popup, TileLayer } = importReaflet();
 
 export default function DraggableMarkerMap() {
-  const { MapContainer, Marker, Popup, TileLayer } = useImportReaflet();
+  
   const ref = collection(db, "linkCourses");
   const [position, setPosition] = useState({ lat: 36.41425, lng: 34.06211 });
   const [inputValues, setInputValues] = useState({

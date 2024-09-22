@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-export const useImportReaflet = () => {
+export const importReaflet = () => {
   const MapContainer = dynamic(
     () => import("react-leaflet").then((mod) => mod.MapContainer),
     { ssr: false }

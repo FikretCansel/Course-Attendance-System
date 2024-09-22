@@ -1,7 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
-import { useImportReaflet } from "@/lib/react-leaflet";
+import { importReaflet } from "@/lib/react-leaflet";
+
+const { MapContainer, Marker, Popup, TileLayer, Circle } = importReaflet();
 
 function LinkCourseComponent({
   course,
@@ -10,7 +12,6 @@ function LinkCourseComponent({
   course: any;
   hasArrived: boolean;
 }) {
-  const { MapContainer, Marker, Popup, TileLayer, Circle } = useImportReaflet();
   const [location, setLocation] = useState<{
     latitude: number | null;
     longitude: number | null;

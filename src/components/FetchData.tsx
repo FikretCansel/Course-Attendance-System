@@ -18,16 +18,13 @@ const FetchData = ({course,setHasArrived}: {course: any, setHasArrived: any}) =>
     return <h1>Bir hata oluştu: { studentError?.message}</h1>;
 
 
-  const sendEmailToStudent = (email: string, name: string) => {
+  const handleGeldimButton = () => {
     setHasArrived(true);
     console.log(`Sending email to: ${email} for student: ${name}`);
     
   };
   if(sendMail === true)
   {
-    students?.forEach((student) => {
-      sendEmailToStudent(student.mail, student.name);
-    });
     setSendMail(false);
   }
 
@@ -77,7 +74,7 @@ const FetchData = ({course,setHasArrived}: {course: any, setHasArrived: any}) =>
                 <button
                   className="bg-red-400 p-3"
                   onClick={() => {
-                    setSendMail(true);
+                    handleGeldimButton();
                   }}
                   disabled={sendMail}
                 >
