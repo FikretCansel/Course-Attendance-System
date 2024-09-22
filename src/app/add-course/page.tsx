@@ -108,7 +108,7 @@ export default function DraggableMarkerMap() {
                 </h2>
                 <div className="basis-1/4"></div>
 
-                <form onSubmit={(e)=>handleSubmit} className="flex flex-col">
+                <form onSubmit={handleSubmit} className="flex flex-col">
                   <table>
                     <tbody>
                       <tr>
