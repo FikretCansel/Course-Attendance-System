@@ -1,24 +1,27 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import { db } from "@/Firebase";
+import { auth, db } from "@/Firebase";
 import { addDoc, collection, GeoPoint } from "firebase/firestore";
 import { importReaflet } from "@/lib/react-leaflet";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { DragEndEvent } from "leaflet";
 const { MapContainer, Marker, Popup, TileLayer } = importReaflet();
 
 export default function DraggableMarkerMap() {
-  
   const ref = collection(db, "linkCourses");
+  const [user, loading, error] = useAuthState(auth)
+  const [validationError, setValidationError] = useState("")
+  
   const [position, setPosition] = useState({ lat: 36.41425, lng: 34.06211 });
   const [inputValues, setInputValues] = useState({
     lat: 36.41425,
     lng: 34.06211,
     courseName: "",
     teacherName: "",
-    userId: "",
     radius: 0,
   });
+  
 
   const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
     userIcon: null,
@@ -26,12 +29,18 @@ export default function DraggableMarkerMap() {
   });
 
   const handleSubmitAddCourse = useCallback(async () => {
+    if(!user?.uid){
+      console.log('user Id bulunamadı')
+      setValidationError('User Not found');
+      return;
+    }
     try {
       await addDoc(ref, {
         courseName: inputValues.courseName,
         courseTeacher: inputValues.teacherName,
         geolocation: new GeoPoint(position.lat, position.lng),
         radius: Number(inputValues.radius),
+        userId: user?.uid
       });
       setInputValues({
         ...inputValues,
@@ -44,7 +53,7 @@ export default function DraggableMarkerMap() {
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-  }, [inputValues, position]);
+  }, [inputValues, position.lat, position.lng, ref, user?.uid]);
 
   useEffect(() => {
     import("leaflet").then((mod) => {
@@ -66,7 +75,7 @@ export default function DraggableMarkerMap() {
     });
   }, []);
 
-  const updatePosition = (e) => {
+  const updatePosition = (e: DragEndEvent) => {
     const newLat = e.target.getLatLng().lat;
     const newLng = e.target.getLatLng().lng;
     setPosition({ lat: newLat, lng: newLng });
@@ -77,11 +86,11 @@ export default function DraggableMarkerMap() {
     return null;
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) => {
     setInputValues({ ...inputValues, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form Data:", inputValues);
     handleSubmitAddCourse(); // Add course data to Firestore
@@ -99,7 +108,7 @@ export default function DraggableMarkerMap() {
                 </h2>
                 <div className="basis-1/4"></div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col">
+                <form onSubmit={(e)=>handleSubmit} className="flex flex-col">
                   <table>
                     <tbody>
                       <tr>
@@ -199,6 +208,7 @@ export default function DraggableMarkerMap() {
                     Add Course
                   </button>
                 </form>
+                {validationError && <p className="text-red-500">{validationError}</p>}
               </div>
             </div>
           </div>
@@ -217,7 +227,7 @@ export default function DraggableMarkerMap() {
                 position={[position.lat, position.lng]}
                 draggable={true}
                 eventHandlers={{
-                  dragend: updatePosition,
+                  dragend: (e)=>updatePosition,
                 }}
                 icon={LIcon.targetIcon}
               >
