@@ -19,7 +19,7 @@ export const MainPage = () => {
         <div className="is-5 m-3">
           <FetchData course={course} setHasArrived={setHasArrived}/>
         </div>
-        <div className="column is-three-quarters">
+        <div className="column is-three-quarters z-10">
           <LinkCourseComponent course={course} hasArrived={hasArrived}/>
         </div>
       </div>
