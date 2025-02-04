@@ -21,7 +21,7 @@ export default function DraggableMarkerMap() {
     teacherName: "",
     radius: 0,
   });
-  
+
 
   const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
     userIcon: null,
@@ -227,7 +227,7 @@ export default function DraggableMarkerMap() {
                 position={[position.lat, position.lng]}
                 draggable={true}
                 eventHandlers={{
-                  dragend: (e)=>updatePosition,
+                  dragend: updatePosition,
                 }}
                 icon={LIcon.targetIcon}
               >
