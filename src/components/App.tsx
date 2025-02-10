@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../Firebase";
 import { usePathname, useRouter } from "next/navigation";
+import { LOGIN, MYCOURSES, REGISTER } from "@/utils/page-urls";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,12 +14,17 @@ function App() {
     auth.onAuthStateChanged((authUser) => {
       setIsLoading(false);
       if (authUser) {
-        router.push(pathname);
+        if(pathname === '/'){
+          router.push(MYCOURSES);
+        }
         if (pathname === "/login") {
-          router.push("courses");
+          router.push(MYCOURSES);
         }
       } else {
-        router.push("/login");
+        if(pathname === '/'+REGISTER){
+          
+        }
+        else router.push(LOGIN);
       }
     });
   }, []);

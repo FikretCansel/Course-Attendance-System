@@ -12,7 +12,7 @@ export const MainPage = () => {
   const params = useParams()
   const coursesRef = doc(db, "linkCourses", params.id as string ?? 'params');
   const [course] =  useDocumentDataOnce(coursesRef);
-
+  
   return (
     <div>
       <div className="columns ">

@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import { importReaflet } from "@/lib/react-leaflet";
+import StudentAdd from "./studentAddForm";
+import useIsTeacher from "@/app/hooks/useIsTeacher";
 
 const { MapContainer, Marker, Popup, TileLayer, Circle } = importReaflet();
 
@@ -16,9 +18,10 @@ function LinkCourseComponent({
     latitude: number | null;
     longitude: number | null;
   }>({ latitude: null, longitude: null });
-  const [balance, setBalance] = useState(10);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const isTeacher = useIsTeacher({ userId: course?.userId })
+  const [studentAddModalsOpen, setStudentAddModalsOpen] = useState(false);
   const [LIcon, setLIcon] = useState<{ userIcon: any; targetIcon: any }>({
     userIcon: null,
     targetIcon: null,
@@ -54,11 +57,15 @@ function LinkCourseComponent({
           setLocation({ latitude, longitude });
 
           if (hasArrived) {
+            if(isTeacher){
+              setStudentAddModalsOpen(true);
+              return;
+            }
             if (isInTargetLocation(latitude, longitude)) {
-              setBalance((prevBalance) => prevBalance - 1); // Bakiye azaltılıyor
-              setMessage("Ders kaydınız onaylandı!"); // Yeşil mesaj
+              setStudentAddModalsOpen(true);
+              setMessage("Ders kaydınız onaylandı!");
             } else {
-              setMessage("Derste değilsiniz."); // Kırmızı mesaj
+              setMessage("Derste değilsiniz.");
             }
           }
         },
@@ -166,7 +173,7 @@ function LinkCourseComponent({
                 icon={LIcon.userIcon}
               >
                 <Popup>
-                  Şu an buradasınız! <br /> Bakiye: {balance}
+                  Şu an buradasınız!
                 </Popup>
               </Marker>
 
@@ -188,6 +195,8 @@ function LinkCourseComponent({
           )}
         </>
       )}
+
+      <StudentAdd isOpen={studentAddModalsOpen} onClose={()=>{setStudentAddModalsOpen(false)}} course={course} />
     </div>
   );
 }
