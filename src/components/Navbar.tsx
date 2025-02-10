@@ -75,7 +75,7 @@ export const Navbar = () => {
 
         <div id="navbarBasicExample" className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
           <div className="navbar-start">
-            <Link className="navbar-item" href={MYCOURSES} onClick={() => setIsActive(false)}>Anasayfa</Link>
+            <Link className="navbar-item" href={'/'+MYCOURSES} onClick={() => setIsActive(false)}>Anasayfa</Link>
             <a className="navbar-item" href="/add-course" onClick={() => setIsActive(false)}>Kurs Ekle</a>
             <Link className="navbar-item" href="/courses" onClick={() => setIsActive(false)}>Kurslarım</Link>
             <div className="navbar-item has-dropdown is-hoverable">

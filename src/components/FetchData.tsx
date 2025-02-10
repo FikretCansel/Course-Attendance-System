@@ -1,6 +1,5 @@
 "use client";
-import { useState } from "react";
-import { collection } from "firebase/firestore";
+import { collection, deleteDoc, doc } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../Firebase";
 import { useParams } from "next/navigation";
@@ -13,6 +12,11 @@ const FetchData = ({ course, setHasArrived }: { course: any, setHasArrived: any 
   const [students, studentIsLoading, studentError] =
     useCollectionData(studentsRef);
     const isTeacher = useIsTeacher({ userId: course?.userId })
+
+    const deleteStudent = (student: any) =>{
+      deleteDoc(doc(studentsRef, '?firstName',student.firstName));
+console.log(student)
+    }
 
   if (!course || studentIsLoading) return <Loaders />;
   if (studentError)
@@ -64,6 +68,7 @@ const FetchData = ({ course, setHasArrived }: { course: any, setHasArrived: any 
                     <td>{student?.firstName}</td>
                     <td>{student?.lastName}</td>
                     <td>{student?.phone}</td>
+                    <td onClick={()=> deleteStudent(student)} className="text-red-600">X</td>
                   </tr>
                 ))}
               </tbody>

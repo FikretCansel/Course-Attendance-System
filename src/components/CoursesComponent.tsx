@@ -9,8 +9,6 @@ import Loaders from "./Loaders";
 
 export default function CoursesComponent() {
   const coursesRef = collection(db, "linkCourses");
-
-  // Fetching data from the collection
   const [coursesSnapshot, isLoading, error] = useCollection(coursesRef);
 
   if(isLoading)
@@ -24,7 +22,6 @@ export default function CoursesComponent() {
         <title>My Courses</title>
         <meta name="description" content="Courses page" />
       </Head>
-
       <main>
         <h1>My Courses</h1>
         <ul>
@@ -36,7 +33,7 @@ export default function CoursesComponent() {
                   <li>
                     <h2>{course.courseName}</h2>
                     <p>{course.tearcherName}</p>
-                    <p>Course ID: {doc.id}</p> {/* Display course ID */}
+                    <p>Course ID: {doc.id}</p>
                   </li>
                 </Link>
               </div>
