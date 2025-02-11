@@ -14,7 +14,7 @@ const FetchData = ({ course, setHasArrived }: { course: any, setHasArrived: any 
     const isTeacher = useIsTeacher({ userId: course?.userId })
 
     const deleteStudent = (student: any) =>{
-      deleteDoc(doc(studentsRef, '?firstName',student.firstName));
+      deleteDoc(doc(studentsRef));
 console.log(student)
     }
 
