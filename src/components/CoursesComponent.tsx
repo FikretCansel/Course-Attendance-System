@@ -1,15 +1,20 @@
 "use client";
 
-import { db } from "@/Firebase";
-import { collection } from "firebase/firestore";
+import { auth, db } from "@/Firebase";
+import { collection, query, where } from "firebase/firestore";
 import Head from "next/head";
 import Link from "next/link";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Loaders from "./Loaders";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function CoursesComponent() {
   const coursesRef = collection(db, "linkCourses");
-  const [coursesSnapshot, isLoading, error] = useCollection(coursesRef);
+  const [user] = useAuthState(auth);
+
+  const q1 = query(coursesRef, where("userId", "==", user?.uid ?? ''))
+  
+  const [coursesSnapshot, isLoading, error] = useCollection(q1);
 
   if(isLoading)
   {
