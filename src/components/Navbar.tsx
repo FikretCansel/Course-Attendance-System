@@ -62,7 +62,7 @@ export const Navbar = () => {
           </Link> */}
 
           <button
-            className={`navbar-burger ${isActive ? 'is-active' : ''}`}
+            className={`navbar-burger !bg-white ${isActive ? 'is-active' : ''}`}
             aria-label="menu"
             aria-expanded={isActive}
             onClick={handleBurgerClick}
@@ -80,13 +80,13 @@ export const Navbar = () => {
             <Link className="navbar-item" href="/courses" onClick={() => setIsActive(false)}>Kurslarım</Link>
             <div className="navbar-item has-dropdown is-hoverable">
               {/* <p className="navbar-link" onClick={() => setIsActive(false)}>Daha Fazlası</p> */}
-              <div className="navbar-dropdown">
+              {/* <div className="navbar-dropdown">
                 <Link className='navbar-item' href="/about" onClick={() => setIsActive(false)}>Yorumlar</Link>
                 <Link className="navbar-item" href="/teachers" onClick={() => setIsActive(false)}>Eğitmenler</Link>
                 <Link className="navbar-item" href="/contact" onClick={() => setIsActive(false)}>İletişim</Link>
                 <hr className="navbar-divider" />
                 <Link className="navbar-item" href="/requestandcomplaint" onClick={() => setIsActive(false)}>İstek Ve Şikayet</Link>
-              </div>
+              </div> */}
             </div>
           </div>
 

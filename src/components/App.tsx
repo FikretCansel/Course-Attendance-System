@@ -30,7 +30,7 @@ function App() {
   }, []);
 
   if (isLoading) {
-    return <h1>Yükleniyor...</h1>;
+    return;
   }
   return;
 }

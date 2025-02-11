@@ -99,7 +99,7 @@ function LinkCourseComponent({
     });
   }, []);
 
-  if (!course) return <h1>Yükleniyor</h1>;
+  if (!course) return;
 
   const targetLocation = {
     latitude: course.geolocation._lat,
