@@ -11,12 +11,12 @@ const FetchData = ({ course, setHasArrived }: { course: any, setHasArrived: any 
   const studentsRef = collection(db, `linkCourses/${params.id}/students`);
   const [students, studentIsLoading, studentError] =
     useCollectionData(studentsRef);
-    const isTeacher = useIsTeacher({ userId: course?.userId })
+  const isTeacher = useIsTeacher({ userId: course?.userId })
 
-    const deleteStudent = (student: any) =>{
-      deleteDoc(doc(studentsRef));
-console.log(student)
-    }
+  const deleteStudent = (student: any) => {
+    deleteDoc(doc(studentsRef));
+    console.log(student)
+  }
 
   if (!course || studentIsLoading) return <Loaders />;
   if (studentError)
@@ -25,7 +25,7 @@ console.log(student)
 
   const handleGeldimButton = () => {
     setHasArrived(true);
-    if(isTeacher){
+    if (isTeacher) {
       setHasArrived(Math.random());
     }
   };
@@ -41,7 +41,6 @@ console.log(student)
                 <img
                   src="https://bulma.io/assets/images/placeholders/96x96.png"
                   alt="Placeholder image"
-
                 />
               </figure>
             </div>
@@ -50,29 +49,30 @@ console.log(student)
               <p className="subtitle is-6">{course?.courseTeacher}</p>
             </div>
           </div>
-          
+          <p>{`Lat: ${course?.geolocation?._lat}, Long: ${course?.geolocation?._long}`}</p>
+          <br />
           <div className="content">
-            <p>{`Lat: ${course?.geolocation?._lat}, Long: ${course?.geolocation?._long}`}</p>
-            <br />
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Surname</th>
-                  <th>Phone</th>
-                </tr>
-              </thead>
-              <tbody>
-                {students?.map((student, index) => (
-                  <tr key={index}>
-                    <td>{student?.firstName}</td>
-                    <td>{student?.lastName}</td>
-                    <td>{student?.phone}</td>
-                    <td onClick={()=> deleteStudent(student)} className="text-red-600">X</td>
+            {
+              isTeacher && <table className="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Phone</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {students?.map((student, index) => (
+                    <tr key={index}>
+                      <td>{student?.firstName}</td>
+                      <td>{student?.lastName}</td>
+                      <td>{student?.phone}</td>
+                      <td onClick={() => deleteStudent(student)} className="text-red-600">X</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            }
             <button
               className="bg-red-400 p-3"
               onClick={() => {

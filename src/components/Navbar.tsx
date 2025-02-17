@@ -18,7 +18,6 @@ export const Navbar = () => {
     setIsActive(prevState => !prevState);
   };
 
-  // Menü dışı tıklamaları kontrol etme
   const handleClickOutside = (event) => {
     if (navbarRef.current && !navbarRef.current.contains(event.target)) {
       setIsActive(false);
@@ -93,7 +92,7 @@ export const Navbar = () => {
           <div className="navbar-end">
             <div className="navbar-item">
               {
-                !user ? <Link className='navbar-link' href={LOGIN}>Login</Link> : <div className="buthrefns">
+                !user ? <Link className='navbar-link' href={'/'+LOGIN}>Login</Link> : <div className="buthrefns">
                 <div className="navbar-item has-dropdown is-hoverable">
                 <p className="navbar-link" onClick={() => setIsActive(false)}>Profile</p>
                   <div className="navbar-dropdown">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../Firebase";
 import { usePathname, useRouter } from "next/navigation";
 import { LOGIN, MYCOURSES, REGISTER } from "@/utils/page-urls";
@@ -22,9 +22,8 @@ function App() {
         }
       } else {
         if(pathname === '/'+REGISTER){
-          
         }
-        else router.push(LOGIN);
+        else if(pathname === '/' || pathname === '/add-course') router.push(LOGIN);
       }
     });
   }, []);
