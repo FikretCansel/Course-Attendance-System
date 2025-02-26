@@ -68,7 +68,7 @@ export const LoginComponent = () => {
           </p>
           <p>
             Şifreni mi unuttun?{" "}
-            <Link href="/forgotpassword"> Şifyeyi değiştir</Link>
+            <Link href="/forgotpassword"> Şifreyi değiştir</Link>
           </p>
           <p>
             henüz hesabın yokmu? <Link href="/register"> Kayıt ol</Link>
